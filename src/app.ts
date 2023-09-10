@@ -1,10 +1,10 @@
 import express, { Express } from "express";
 //! imp setupDatabase
-import { VicConnectServer } from "./setupServer";
+import { VicConnectServer } from "@root/setupServer";
 //! imp databaseConnection
-import databaseConnection from "./setupDatabase";
+import databaseConnection from "@root/setupDatabase";
 //! imp config
-import { config } from "./config"; //! config instance
+import { config } from "@root/config"; //! config instance
 
 class Application {
   constructor() {}
@@ -19,6 +19,7 @@ class Application {
 
   private loadConfig(): void {
     config.validateConfig();
+    config.cloudinaryConfig();
   }
 }
 

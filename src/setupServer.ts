@@ -14,13 +14,13 @@ import { createAdapter } from "@socket.io/redis-adapter";
 import { createClient } from "redis";
 
 //! imp Interface
-import { CustomError, IErrorResponse } from "./shared/globals/helpers/error-handler";
+import { CustomError, IErrorResponse } from "@global/helpers/error-handler";
 
 //! app Routes
-import applicationRoutes from "./routes";
+import applicationRoutes from "@root/routes";
 
 //! imp config
-import { config } from "./config";
+import { config } from "@root/config";
 
 const SERVER_PORT = 5000;
 const log: Logger = config.createLogger("setupServer");
@@ -44,7 +44,7 @@ export class VicConnectServer {
       cookieSession({
         name: "session",
         keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
-        maxAge: 7 * 24 * 3600000, //! one week
+        maxAge: 5000, //! 5 seconds
         secure: config.NODE_ENV !== "development" //! dev: false, prod: true
       })
     );
@@ -77,7 +77,7 @@ export class VicConnectServer {
       res.status(httpStatusCodes.NOT_FOUND).json({ message: `${req.originalUrl} not found` });
     });
 
-    app.use((error: IErrorResponse, req: Request, res: Response, next: NextFunction) => {
+    app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
       log.error(error);
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json(error.serializeError());
@@ -124,5 +124,5 @@ export class VicConnectServer {
     });
   }
 
-  private socketIOConnection(io: Server): void {}
+  private socketIOConnection(_io: Server): void {}
 }
