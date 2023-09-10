@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import bunyan from "bunyan";
-import defaultExport from "express";
+import { v2 as cloudinary } from "cloudinary";
 
 dotenv.config({});
 
@@ -13,6 +13,10 @@ class Config {
   public SECRET_KEY_TWO: string | undefined;
   public REDIS_URL: string | undefined;
 
+  public CLOUD_NAME: string | undefined;
+  public CLOUD_API_KEY: string | undefined;
+  public CLOUD_API_SECRET: string | undefined;
+
   private readonly DEFAULT_DATABASE_URL = "mongodb://localhost:27017/vicconnect-backend";
   private readonly DEFAULT_CLIENT_URL = "http://localhost:3000";
 
@@ -24,6 +28,10 @@ class Config {
     this.SECRET_KEY_ONE = process.env.SECRET_KEY_ONE || "";
     this.SECRET_KEY_TWO = process.env.SECRET_KEY_TWO || "";
     this.REDIS_URL = process.env.REDIS_URL || "";
+
+    this.CLOUD_NAME = process.env.CLOUD_NAME || "";
+    this.CLOUD_API_KEY = process.env.CLOUD_API_KEY || "";
+    this.CLOUD_API_SECRET = process.env.CLOUD_API_SECRET || "";
   }
 
   public createLogger(name: string): bunyan {
@@ -37,6 +45,15 @@ class Config {
         throw new Error(`Configuration ${key} is underfined.`);
       }
     }
+  }
+
+  public cloudinaryConfig(): void {
+    cloudinary.config({
+      cloud_name: this.CLOUD_NAME,
+      api_key: this.CLOUD_API_KEY,
+      api_secret: this.CLOUD_API_SECRET,
+      secure: true
+    });
   }
 }
 

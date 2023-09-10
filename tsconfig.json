@@ -7,7 +7,7 @@
       "ES2015"
     ],
     "baseUrl": ".",
-    "outDir": "./build",
+    "outDir": "build",
     "rootDir": ".",
     "strict": true,
     "noImplicitAny": true,
